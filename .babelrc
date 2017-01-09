@@ -1,0 +1,15 @@
+{
+  "presets": [
+    "es2015",
+    "stage-0"
+  ],
+  "plugins": [
+    ["module-resolver", {
+      "root": ["./api"],
+      "alias": {
+        "api": "./api",
+        "mongoose": "./api/mongoose"
+      }
+    }]
+  ]
+}
