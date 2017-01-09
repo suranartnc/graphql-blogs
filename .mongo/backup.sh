@@ -13,7 +13,7 @@ fi
 
 echo -e "starting backup db......\n"
 
-docker exec -i urrsk_mongo tar -zcvf tmp/"$backupFileName" data/db
-docker cp urrsk_mongo:/tmp/"$backupFileName" .
+docker exec -i graphql_blogs_mongo tar -zcvf tmp/"$backupFileName" data/db
+docker cp graphql_blogs_mongo:/tmp/"$backupFileName" .
 
 echo -e "\nbackup db to $backupFileName complete"
