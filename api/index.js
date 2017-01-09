@@ -9,8 +9,8 @@ import { createServer } from 'http'
 import config from 'api/config'
 import schema from 'api/schema'
 
-// import mongooseConnector from 'api/mongoose/connector'
-// const mongoose = mongooseConnector(config.mongoConnectionString)
+import mongooseConnector from './mongoose/connector'
+const mongoose = mongooseConnector(config.mongoConnectionString)
 
 const app = express()
 app.use(express.static(path.join(process.cwd(), 'static')))
@@ -42,7 +42,7 @@ app.use('/graphql', graphqlExpress((req, res) => {
     schema,
     context: {
       user,
-      // mongoose,
+      mongoose,
     }
   }
 }))

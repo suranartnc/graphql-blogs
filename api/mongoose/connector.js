@@ -6,7 +6,6 @@ import './models/post'
 import './models/user'
 
 export default (connectionUri) => {
-  console.log(connectionUri)
   mongoose.Promise = global.Promise
   mongoose.connect(connectionUri)
 

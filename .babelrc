@@ -7,8 +7,7 @@
     ["module-resolver", {
       "root": ["./api"],
       "alias": {
-        "api": "./api",
-        "mongoose": "./api/mongoose"
+        "api": "./api"
       }
     }]
   ]
