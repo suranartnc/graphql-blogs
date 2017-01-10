@@ -8,6 +8,11 @@ import {
 
 const typeDefs = [`
 
+  # Each root field must have resolver
+  # Each custom type have some fields, use to cast received data
+  # Each field with custom type must have resolver
+  # Each resolver tell us how to resolve fields of a custom type
+
   type QueryType {
 
     posts(
