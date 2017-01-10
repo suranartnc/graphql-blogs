@@ -2,17 +2,19 @@ import { merge } from 'lodash'
 import { makeExecutableSchema } from 'graphql-tools'
 
 import {
-  schema as querySchema,
-  resolvers as queryResolvers,
-} from './query/schema'
+  typeDefs as mongooseTypeDefs,
+  resolvers as mongooseResolvers,
+} from 'api/mongoose/schema'
 
 const typeDefs = [`
   schema {
     query: QueryType
+    # mutation: MutationType
+    # subscription: SubscriptionType
   }
-`, ...querySchema]
+`, ...mongooseTypeDefs]
 
-const resolvers = merge(queryResolvers)
+const resolvers = merge(mongooseResolvers)
 
 export default makeExecutableSchema({
   typeDefs,

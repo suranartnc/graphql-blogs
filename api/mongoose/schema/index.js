@@ -1,4 +1,4 @@
-export const schema = [`
+export const typeDefs = [`
   type QueryType {
     post(
       _id: String!
