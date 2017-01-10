@@ -28,15 +28,6 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   }],
-  shares: {
-    type: Number,
-    min: 0,
-  },
-  staffpick: {
-    type: Boolean,
-    indexed: true,
-    default: false,
-  },
   status: {
     type: Number,
     enum: _.values(postStatus),
