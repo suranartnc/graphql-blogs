@@ -58,6 +58,7 @@ app.use('/graphiql', graphiqlExpress({
     _id
     title
     body
+    categories
     author {
       _id
       email
@@ -67,6 +68,7 @@ app.use('/graphiql', graphiqlExpress({
         picture
       }
     }
+    comments
   }
 }`,
 }))
