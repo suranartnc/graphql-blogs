@@ -4,6 +4,7 @@ export const typeDefs = [`
     title: String!
     body: String!
     author: UserType!
+    comments: [CommentType]
   }
 
   type UserType {
@@ -17,12 +18,28 @@ export const typeDefs = [`
     displayName: String
     picture: String
   }
+
+  type CommentType {
+    body: String!
+    author: UserType!
+    date: String!
+  }
 `]
 
 export const resolvers = {
   PostType: {
-    author(root, args, { UserModel }) {
-      return UserModel.findById(root.userId)
+    author(post, args, { UserModel }) {
+      return UserModel.findById(post.userId)
+    },
+    comments(post, args, { CommentModel }) {
+      return CommentModel.find({
+        postId: post._id
+      })
+    }
+  },
+  CommentType: {
+    author(comment, args, { UserModel }) {
+      return UserModel.findById(comment.userId)
     }
   }
 }
