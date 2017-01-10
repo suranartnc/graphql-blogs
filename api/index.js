@@ -53,8 +53,9 @@ app.use('/graphql', graphqlExpress((req, res) => {
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
   query: `{
-  post(id: 1) {
-    id
+  posts(limit: 10) {
+    _id
+    title
   }
 }`,
 }))

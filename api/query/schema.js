@@ -19,6 +19,11 @@ export const resolvers = {
   QueryType: {
     post(root, { _id }, { PostModel }) {
       return PostModel.findById(_id)
+    },
+    posts(root, { limit }, { PostModel }) {
+      return PostModel.find()
+        .sort('-date')
+        .limit(limit)
     }
   }
 }
