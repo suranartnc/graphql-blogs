@@ -57,6 +57,16 @@ app.use('/graphiql', graphiqlExpress({
   posts(limit: 10) {
     _id
     title
+    body
+    author {
+      _id
+      email
+      profile {
+        type
+        displayName
+        picture
+      }
+    }
   }
 }`,
 }))
