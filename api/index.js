@@ -9,7 +9,7 @@ import { createServer } from 'http'
 import config from 'api/config'
 import schema from 'api/schema'
 
-import mongooseConnector from './mongoose/connector'
+import mongooseConnector from './mongodb/connector'
 const mongoose = mongooseConnector(config.mongoConnectionString)
 
 const app = express()
@@ -20,10 +20,11 @@ app.use(bodyParser.json())
 function getUser(req, res) {
   let user = {
     _id: '',
-    email: '',
+    email: 'Annonymous@gmail.com',
     profile: {
       type: 'guest',
-      picture: '',
+      displayName: 'Annonymous',
+      picture: 'http://geniusdemo.eu/front/images/avatar.jpg',
     }
   }
   return user
@@ -42,7 +43,10 @@ app.use('/graphql', graphqlExpress((req, res) => {
     schema,
     context: {
       user,
-      mongoose,
+      UserModel: mongoose.model('User'),
+      CategoryModel: mongoose.model('Category'),
+      PostModel: mongoose.model('Post'),
+      CommentModel: mongoose.model('Comment')
     }
   }
 }))
@@ -50,8 +54,19 @@ app.use('/graphql', graphqlExpress((req, res) => {
 app.use('/graphiql', graphiqlExpress({
   endpointURL: '/graphql',
   query: `{
-  post(id: 1) {
-    id
+  posts(limit: 10) {
+    _id
+    title
+    body
+    author {
+      _id
+      email
+      profile {
+        type
+        displayName
+        picture
+      }
+    }
   }
 }`,
 }))
