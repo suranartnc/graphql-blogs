@@ -9,7 +9,7 @@ import { createServer } from 'http'
 import config from 'api/config'
 import schema from 'api/schema'
 
-import mongooseConnector from './mongoose/connector'
+import mongooseConnector from './mongodb/connector'
 const mongoose = mongooseConnector(config.mongoConnectionString)
 
 const app = express()

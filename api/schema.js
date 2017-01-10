@@ -4,7 +4,7 @@ import { makeExecutableSchema } from 'graphql-tools'
 import {
   typeDefs as mongooseTypeDefs,
   resolvers as mongooseResolvers,
-} from 'api/mongoose/schema'
+} from 'api/mongodb/schema'
 
 const typeDefs = [`
   schema {
