@@ -20,10 +20,11 @@ app.use(bodyParser.json())
 function getUser(req, res) {
   let user = {
     _id: '',
-    email: '',
+    email: 'Annonymous@gmail.com',
     profile: {
       type: 'guest',
-      picture: '',
+      displayName: 'Annonymous',
+      picture: 'http://geniusdemo.eu/front/images/avatar.jpg',
     }
   }
   return user

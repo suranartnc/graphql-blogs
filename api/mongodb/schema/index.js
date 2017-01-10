@@ -1,29 +1,15 @@
 export const typeDefs = [`
-  type QueryType {
-    post(
-      _id: String!
-    ): PostType
-
-    posts(
-      limit: Int!
-    ): [PostType]
-  }
-
   type PostType {
     _id: String!
     title: String!
+    author: UserType
   }
 `]
 
 export const resolvers = {
-  QueryType: {
-    post(root, { _id }, { PostModel }) {
-      return PostModel.findById(_id)
-    },
-    posts(root, { limit }, { PostModel }) {
-      return PostModel.find()
-        .sort('-date')
-        .limit(limit)
+  PostType: {
+    author(root, {}, { UserModel}) {
+      return UserModel.findById(root.userId)
     }
   }
 }
