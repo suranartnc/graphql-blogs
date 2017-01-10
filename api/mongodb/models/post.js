@@ -37,14 +37,10 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
   deletedAt: {
     type: Date,
   },
-})
+}, { timestamps: true })
 
 PostSchema.pre('save', function generateExcerpt(next) {
   const excerpt = sanitizeHtml(this.body, {

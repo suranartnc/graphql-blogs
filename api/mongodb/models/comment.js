@@ -5,10 +5,6 @@ const CommentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -23,6 +19,6 @@ const CommentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Comment',
   },
-})
+}, { timestamps: true })
 
 export default mongoose.model('Comment', CommentSchema)

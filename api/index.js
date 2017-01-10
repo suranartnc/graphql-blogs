@@ -19,7 +19,7 @@ app.use(bodyParser.json())
 
 function getUser(req, res) {
   let user = {
-    _id: '',
+    _id: '5873738dbd47c80001efec08',  // for dev purpose only
     email: 'Annonymous@gmail.com',
     profile: {
       type: 'guest',

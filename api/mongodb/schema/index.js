@@ -7,6 +7,7 @@ export const typeDefs = [`
     author: UserType!
     categories: [CategoryType]
     comments: [CommentType]
+    createdAt: String!
   }
 
   type CategoryType {
@@ -17,7 +18,7 @@ export const typeDefs = [`
   type CommentType {
     body: String!
     author: UserType!
-    date: String!
+    createdAt: String!
   }
 
   type UserType {
