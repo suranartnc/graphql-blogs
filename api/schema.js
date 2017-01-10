@@ -8,9 +8,10 @@ import {
 
 const typeDefs = [`
   schema {
-    query: Query
+    query: QueryType
   }
 `, ...querySchema]
+
 const resolvers = merge(queryResolvers)
 
 export default makeExecutableSchema({

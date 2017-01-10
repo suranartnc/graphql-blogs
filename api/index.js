@@ -42,7 +42,10 @@ app.use('/graphql', graphqlExpress((req, res) => {
     schema,
     context: {
       user,
-      mongoose,
+      UserModel: mongoose.model('User'),
+      CategoryModel: mongoose.model('Category'),
+      PostModel: mongoose.model('Post'),
+      CommentModel: mongoose.model('Comment')
     }
   }
 }))

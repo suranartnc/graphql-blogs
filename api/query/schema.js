@@ -1,21 +1,24 @@
 export const schema = [`
-  type Query {
+  type QueryType {
     post(
-      id: Int!
-    ): Post
+      _id: String!
+    ): PostType
+
+    posts(
+      limit: Int!
+    ): [PostType]
   }
 
-  type Post {
-    id: Int!
+  type PostType {
+    _id: String!
+    title: String!
   }
 `]
 
 export const resolvers = {
-  Query: {
-    post(root, { id, ...args }) {
-      return {
-        id
-      }
+  QueryType: {
+    post(root, { _id }, { PostModel }) {
+      return PostModel.findById(_id)
     }
   }
 }
