@@ -22,6 +22,7 @@ const typeDefs = [`
   }
 
   type MutationType {
+
     addPost(
       title: String!
       body: String!
@@ -29,6 +30,11 @@ const typeDefs = [`
       thumbnail: String
       tags: [String]
     ): PostType
+
+    addComment(
+      body: String!
+      postId: String!
+    ): CommentType
   }
 
   schema {
@@ -58,6 +64,12 @@ const rootResolvers = {
       post.userId = user._id
       return PostModel.create(post)
         .then(({ _id }) => PostModel.findById(_id))
+    },
+    addComment(root, args, { CommentModel, user }) {
+      const comment = Object.assign({}, args)
+      comment.userId = user._id
+      return CommentModel.create(comment)
+        .then(({ _id }) => CommentModel.findById(_id))
     }
   }
 }
