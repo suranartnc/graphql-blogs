@@ -28,15 +28,6 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   }],
-  shares: {
-    type: Number,
-    min: 0,
-  },
-  staffpick: {
-    type: Boolean,
-    indexed: true,
-    default: false,
-  },
   status: {
     type: Number,
     enum: _.values(postStatus),
@@ -46,14 +37,10 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
   deletedAt: {
     type: Date,
   },
-})
+}, { timestamps: true })
 
 PostSchema.pre('save', function generateExcerpt(next) {
   const excerpt = sanitizeHtml(this.body, {
