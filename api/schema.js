@@ -2,11 +2,11 @@ import { merge } from 'lodash'
 import { makeExecutableSchema } from 'graphql-tools'
 
 import {
-  typeDefs as mongodbTypeDefs,
+  schema as mongodbSchema,
   resolvers as mongodbResolvers,
 } from 'api/mongodb/schema'
 
-const typeDefs = [`
+const rootSchema = [`
 
   # Each root field must have resolver
   # Each custom type have some fields, use to cast received data
@@ -48,7 +48,7 @@ const typeDefs = [`
     mutation: MutationType
   }
 
-`, ...mongodbTypeDefs]
+`]
 
 const rootResolvers = {
 
@@ -69,12 +69,18 @@ const rootResolvers = {
 
   MutationType: {
     addPost(root, args, { PostModel, user }) {
+      if (!user) {
+        throw new Error('Must be logged in to add new post.');
+      }
       const post = Object.assign({}, args)
       post.userId = user._id
       return PostModel.create(post)
         .then(({ _id }) => PostModel.findById(_id))
     },
     addComment(root, args, { CommentModel, user }) {
+      if (!user) {
+        throw new Error('Must be logged in to post a comment.');
+      }
       const comment = Object.assign({}, args)
       comment.userId = user._id
       return CommentModel.create(comment)
@@ -83,9 +89,10 @@ const rootResolvers = {
   }
 }
 
+const schema = [...rootSchema, ...mongodbSchema];
 const resolvers = merge(rootResolvers, mongodbResolvers)
 
 export default makeExecutableSchema({
-  typeDefs,
+  typeDefs: schema,
   resolvers,
 })

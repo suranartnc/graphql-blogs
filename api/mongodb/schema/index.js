@@ -1,4 +1,4 @@
-export const typeDefs = [`
+export const schema = [`
 
   type PostType {
     _id: String!
