@@ -6,7 +6,10 @@ export const schema = [`
     body: String!
     author: UserType!
     categories: [CategoryType]
-    comments: [CommentType]
+    comments(
+      limit: Int
+      offset: Int
+    ): [CommentType]
     createdAt: String!
   }
 
@@ -51,10 +54,10 @@ export const resolvers = {
       return UserModel.findById(post.userId)
     },
 
-    comments(post, args, { CommentModel }) {
-      return CommentModel.find({
-        postId: post._id
-      })
+    comments(post, { limit = 10, offset = 0 }, { CommentModel }) {
+      return CommentModel.find({ postId: post._id })
+        .skip(offset)
+        .limit(limit)
     }
 
   },
