@@ -2,11 +2,11 @@ import { merge } from 'lodash'
 import { makeExecutableSchema } from 'graphql-tools'
 
 import {
-  typeDefs as mongodbTypeDefs,
+  schema as mongodbSchema,
   resolvers as mongodbResolvers,
 } from 'api/mongodb/schema'
 
-const typeDefs = [`
+const rootSchema = [`
 
   # Each root field must have resolver
   # Each custom type have some fields, use to cast received data
@@ -17,6 +17,7 @@ const typeDefs = [`
 
     posts(
       limit: Int
+      offset: Int
     ): [PostType]
 
     post(
@@ -47,13 +48,16 @@ const typeDefs = [`
     mutation: MutationType
   }
 
-`, ...mongodbTypeDefs]
+`]
 
 const rootResolvers = {
 
   QueryType: {
-    posts(root, { limit = 10 }, { PostModel }) {
-      return PostModel.find().limit(limit).sort('-createdAt')
+    posts(root, { limit = 10, offset = 0 }, { PostModel }) {
+      return PostModel.find()
+        .skip(offset)
+        .limit(limit)
+        .sort('-createdAt')
     },
     post(root, { _id }, { PostModel }) {
       return PostModel.findById(_id)
@@ -64,24 +68,31 @@ const rootResolvers = {
   },
 
   MutationType: {
-    addPost(root, args, { PostModel, user }) {
+    async addPost(root, args, { PostModel, user }) {
+      if (!user) {
+        throw new Error('Must be logged in to add new post.');
+      }
       const post = Object.assign({}, args)
       post.userId = user._id
-      return PostModel.create(post)
-        .then(({ _id }) => PostModel.findById(_id))
+      const newPost = await PostModel.create(post)
+      return PostModel.findById(newPost._id)
     },
-    addComment(root, args, { CommentModel, user }) {
+    async addComment(root, args, { CommentModel, user }) {
+      if (!user) {
+        throw new Error('Must be logged in to post a comment.');
+      }
       const comment = Object.assign({}, args)
       comment.userId = user._id
-      return CommentModel.create(comment)
-        .then(({ _id }) => CommentModel.findById(_id))
+      const newComment = await CommentModel.create(comment)
+      return CommentModel.findById(newComment._id)
     }
   }
 }
 
+const schema = [...rootSchema, ...mongodbSchema];
 const resolvers = merge(rootResolvers, mongodbResolvers)
 
 export default makeExecutableSchema({
-  typeDefs,
+  typeDefs: schema,
   resolvers,
 })
