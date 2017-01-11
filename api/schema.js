@@ -68,23 +68,23 @@ const rootResolvers = {
   },
 
   MutationType: {
-    addPost(root, args, { PostModel, user }) {
+    async addPost(root, args, { PostModel, user }) {
       if (!user) {
         throw new Error('Must be logged in to add new post.');
       }
       const post = Object.assign({}, args)
       post.userId = user._id
-      return PostModel.create(post)
-        .then(({ _id }) => PostModel.findById(_id))
+      const newPost = await PostModel.create(post)
+      return PostModel.findById(newPost._id)
     },
-    addComment(root, args, { CommentModel, user }) {
+    async addComment(root, args, { CommentModel, user }) {
       if (!user) {
         throw new Error('Must be logged in to post a comment.');
       }
       const comment = Object.assign({}, args)
       comment.userId = user._id
-      return CommentModel.create(comment)
-        .then(({ _id }) => CommentModel.findById(_id))
+      const newComment = await CommentModel.create(comment)
+      return CommentModel.findById(newComment._id)
     }
   }
 }
