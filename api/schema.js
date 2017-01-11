@@ -53,7 +53,7 @@ const typeDefs = [`
 const rootResolvers = {
 
   QueryType: {
-    posts(root, { first = 10, offset = 0 }, { PostModel }) {
+    posts(root, { limit = 10, offset = 0 }, { PostModel }) {
       return PostModel.find()
         .skip(offset)
         .limit(limit)
