@@ -17,6 +17,7 @@ const typeDefs = [`
 
     posts(
       limit: Int
+      offset: Int
     ): [PostType]
 
     post(
@@ -52,8 +53,11 @@ const typeDefs = [`
 const rootResolvers = {
 
   QueryType: {
-    posts(root, { limit = 10 }, { PostModel }) {
-      return PostModel.find().limit(limit).sort('-createdAt')
+    posts(root, { first = 10, offset = 0 }, { PostModel }) {
+      return PostModel.find()
+        .skip(offset)
+        .limit(limit)
+        .sort('-createdAt')
     },
     post(root, { _id }, { PostModel }) {
       return PostModel.findById(_id)
