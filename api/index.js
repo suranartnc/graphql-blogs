@@ -47,7 +47,20 @@ app.use('/graphql', graphqlExpress((req, res) => {
       CategoryModel: mongoose.model('Category'),
       PostModel: mongoose.model('Post'),
       CommentModel: mongoose.model('Comment')
-    }
+    },
+    formatError: ({ message, locations, stack }) => {
+      let format = {
+        message
+      }
+      if (config.isProduction !== true) {
+        format = {
+          ...format,
+          locations,
+          stack
+        }
+      }
+      return format
+    },
   }
 }))
 
