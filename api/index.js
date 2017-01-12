@@ -20,9 +20,9 @@ app.use(bodyParser.json())
 
 app.use('/graphql', graphqlExpress((req, res) => {
 
-  const query = req.query.query || req.body.query;
+  const query = req.query.query || req.body.query
   if (query && query.length > 2000) {
-    throw new Error('Query too large.');
+    throw new Error('Query too large.')
   }
 
   const user = getUser(req, res)
@@ -40,14 +40,11 @@ app.use('/graphql', graphqlExpress((req, res) => {
 
     formatError: ({ message, locations, stack }) => {
       let format = {
-        message
+        message,
+        locations
       }
-      if (config.isProduction !== true) {
-        format = {
-          ...format,
-          locations,
-          stack
-        }
+      if (config.isProduction === true) {
+        format.message = 'Sorry, something went wrong.'
       }
       return format
     },
