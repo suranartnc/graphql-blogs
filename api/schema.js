@@ -35,12 +35,22 @@ const rootSchema = [`
       categories: [String]
       thumbnail: String
       tags: [String]
-    ): PostType
+    ): addPostResponseType
 
     addComment(
       body: String!
       postId: String!
     ): CommentType
+  }
+
+  type addPostResponseType {
+    post: PostType,
+    errors: [UserErrorType]!
+  }
+
+  type UserErrorType {
+    key: String,
+    message: String!
   }
 
   schema {
@@ -69,22 +79,41 @@ const rootResolvers = {
 
   MutationType: {
     async addPost(root, args, { PostModel, user }) {
+
       if (!user) {
         throw new Error('Must be logged in to add new post.');
       }
+
+      let newPost = null
+      let errors = []
+
       const post = Object.assign({}, args)
-      post.userId = user._id
-      const newPost = await PostModel.create(post)
-      return PostModel.findById(newPost._id)
+
+      if (post.title.length < 3) {
+        errors.push({
+          key: 'title',
+          message: 'The title field must longer than 3 characters.'
+        })
+      }
+
+      if (errors.length === 0) {
+        post.userId = user._id
+        newPost = await PostModel.create(post)
+      }
+
+      return {
+        post: newPost,
+        errors
+      }
     },
-    async addComment(root, args, { CommentModel, user }) {
+
+    addComment(root, args, { CommentModel, user }) {
       if (!user) {
         throw new Error('Must be logged in to post a comment.');
       }
       const comment = Object.assign({}, args)
       comment.userId = user._id
-      const newComment = await CommentModel.create(comment)
-      return CommentModel.findById(newComment._id)
+      return CommentModel.create(comment)
     }
   }
 }

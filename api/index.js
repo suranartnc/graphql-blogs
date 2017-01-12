@@ -40,11 +40,15 @@ app.use('/graphql', graphqlExpress((req, res) => {
 
     formatError: ({ message, locations, stack }) => {
       let format = {
-        message,
-        locations
+        message: 'Sorry, something went wrong.'
       }
-      if (config.isProduction === true) {
-        format.message = 'Sorry, something went wrong.'
+      if (config.isProduction !== true) {
+        format = {
+          ...format,
+          message,
+          locations,
+          stack
+        }
       }
       return format
     },
