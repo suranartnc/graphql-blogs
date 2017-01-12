@@ -1,46 +1,35 @@
 import path from 'path'
 import express from 'express'
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express'
-
-import bodyParser from 'body-parser'
-
 import { createServer } from 'http'
+import cors from 'cors'
+import bodyParser from 'body-parser'
 
 import config from 'api/config'
 import schema from 'api/schema'
-
 import mongooseConnector from './mongodb/connector'
+import { getUser } from './auth'
+
 const mongoose = mongooseConnector(config.mongoConnectionString)
 
 const app = express()
-app.use(express.static(path.join(process.cwd(), 'static')))
+
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-function getUser(req, res) {
-  let user = {
-    _id: '5873738dbd47c80001efec08',  // for dev purpose only
-    email: 'Annonymous@gmail.com',
-    profile: {
-      type: 'guest',
-      displayName: 'Annonymous',
-      picture: 'http://geniusdemo.eu/front/images/avatar.jpg',
-    }
-  }
-  return user
-}
-
 app.use('/graphql', graphqlExpress((req, res) => {
 
-  const query = req.query.query || req.body.query;
+  const query = req.query.query || req.body.query
   if (query && query.length > 2000) {
-    throw new Error('Query too large.');
+    throw new Error('Query too large.')
   }
 
   const user = getUser(req, res)
 
   return {
     schema,
+
     context: {
       user,
       UserModel: mongoose.model('User'),
@@ -48,16 +37,14 @@ app.use('/graphql', graphqlExpress((req, res) => {
       PostModel: mongoose.model('Post'),
       CommentModel: mongoose.model('Comment')
     },
+
     formatError: ({ message, locations, stack }) => {
       let format = {
-        message
+        message,
+        locations
       }
-      if (config.isProduction !== true) {
-        format = {
-          ...format,
-          locations,
-          stack
-        }
+      if (config.isProduction === true) {
+        format.message = 'Sorry, something went wrong.'
       }
       return format
     },
