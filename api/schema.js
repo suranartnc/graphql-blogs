@@ -24,6 +24,8 @@ const rootSchema = [`
       _id: String!
     ): PostType
 
+    testPostConnection: PostConnection
+
     currentUser: UserType
   }
 
@@ -41,6 +43,13 @@ const rootSchema = [`
       body: String!
       postId: String!
     ): CommentType
+  }
+
+  type PageInfo {
+    endCursor: String
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String
   }
 
   type addPostResponseType {
@@ -71,6 +80,28 @@ const rootResolvers = {
     },
     post(root, { _id }, { PostModel }) {
       return PostModel.findById(_id)
+    },
+    testPostConnection(root, args, { PostModel }) {
+      return PostModel.find()
+        .limit(5)
+        .then((posts) => {
+          const edges = posts.map(post => ({
+            cursor: `post-${post._id.toString()}`,
+            node: post
+          }))
+
+          const pageInfo = {
+            endCursor: edges[edges.length - 1] ? edges[edges.length - 1].cursor : false,
+            hasNextPage: true,
+            hasPreviousPage: false,
+            startCursor: edges[0] ? edges[0].cursor : false
+          }
+
+          return {
+            edges,
+            pageInfo
+          }
+        })
     },
     currentUser(root, args, { user }) {
       return user

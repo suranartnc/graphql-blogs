@@ -13,6 +13,16 @@ export const schema = [`
     createdAt: String!
   }
 
+  type PostConnection {
+    edges: [PostEdge]
+    pageInfo: PageInfo!
+  }
+
+  type PostEdge {
+    cursor: String!
+    node: PostType
+  }
+
   type CategoryType {
     title: String!
     slug: String!
