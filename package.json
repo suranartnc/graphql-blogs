@@ -41,6 +41,7 @@
         "sanitize-html": "^1.13.0"
     },
     "devDependencies": {
+        "eslint": "^3.14.0",
         "nodemon": "^1.11.0"
     }
 }
