@@ -39,5 +39,8 @@
         "lodash": "^4.17.4",
         "mongoose": "^4.7.6",
         "sanitize-html": "^1.13.0"
+    },
+    "devDependencies": {
+        "nodemon": "^1.11.0"
     }
 }
