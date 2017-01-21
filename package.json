@@ -41,7 +41,9 @@
         "sanitize-html": "^1.13.0"
     },
     "devDependencies": {
+        "babel-eslint": "^7.1.1",
         "eslint": "^3.14.0",
+        "eslint-config-standard": "^6.2.1",
         "nodemon": "^1.11.0"
     }
 }
