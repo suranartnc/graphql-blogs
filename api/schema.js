@@ -3,7 +3,7 @@ import { makeExecutableSchema } from 'graphql-tools'
 
 import {
   schema as mongodbSchema,
-  resolvers as mongodbResolvers,
+  resolvers as mongodbResolvers
 } from 'api/mongodb/schema'
 
 const rootSchema = [`
@@ -72,16 +72,16 @@ const rootSchema = [`
 const rootResolvers = {
 
   QueryType: {
-    posts(root, { limit = 10, offset = 0 }, { PostModel }) {
+    posts (root, { limit = 10, offset = 0 }, { PostModel }) {
       return PostModel.find()
         .skip(offset)
         .limit(limit)
         .sort('-createdAt')
     },
-    post(root, { _id }, { PostModel }) {
+    post (root, { _id }, { PostModel }) {
       return PostModel.findById(_id)
     },
-    testPostConnection(root, args, { PostModel }) {
+    testPostConnection (root, args, { PostModel }) {
       return PostModel.find()
         .limit(5)
         .then((posts) => {
@@ -103,13 +103,13 @@ const rootResolvers = {
           }
         })
     },
-    currentUser(root, args, { user }) {
+    currentUser (root, args, { user }) {
       return user
     }
   },
 
   MutationType: {
-    async addPost(root, args, { PostModel, user }) {
+    async addPost (root, args, { PostModel, user }) {
 
       if (!user) {
         throw new Error('Must be logged in to add new post.');
@@ -138,7 +138,7 @@ const rootResolvers = {
       }
     },
 
-    addComment(root, args, { CommentModel, user }) {
+    addComment (root, args, { CommentModel, user }) {
       if (!user) {
         throw new Error('Must be logged in to post a comment.');
       }
@@ -154,5 +154,5 @@ const resolvers = merge(rootResolvers, mongodbResolvers)
 
 export default makeExecutableSchema({
   typeDefs: schema,
-  resolvers,
+  resolvers
 })
