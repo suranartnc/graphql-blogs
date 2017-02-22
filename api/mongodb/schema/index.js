@@ -4,6 +4,7 @@ export const schema = [`
     _id: String!
     title: String!
     body: String!
+    excerpt: String!
     author: UserType!
     categories: [CategoryType]
     comments(
